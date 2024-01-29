@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marquee Player</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    #marquee-container {
+      width: 400px;
+      overflow: hidden;
+      white-space: nowrap;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 20px;
+    }
+
+    #marquee-text {
+      display: inline-block;
+      animation: marqueeAnimation linear infinite;
+    }
+
+    @keyframes marqueeAnimation {
+      0% {
+        transform: translateX(100%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      padding: 10px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div id="marquee-container">
+  <div id="marquee-text">
+    <span>Hello</span>
+    <span>World</span>
+    <span>This</span>
+    <span>Is</span>
+    <span>A</span>
+    <span>Marquee</span>
+  </div>
+</div>
+
+<div class="controls">
+  <button onclick="previous()">Previous</button>
+  <button onclick="togglePlayPause()">Play/Pause</button>
+  <button onclick="next()">Next</button>
+  <button onclick="fastBackward()">Fast Backward</button>
+  <button onclick="fastForward()">Fast Forward</button>
+</div>
+
+<script>
+  const marqueeText = document.getElementById('marquee-text');
+  let isPlaying = true;
+  let currentIndex = 0;
+  const items = ["Hello", "World", "This", "Is", "A", "Marquee"];
+  let animation;
+  let animationSpeed = 2000; // Default animation speed
+
+  function previous() {
+    currentIndex = (currentIndex - 1 + items.length) % items.length;
+    updateText();
+  }
+
+  function togglePlayPause() {
+    if (isPlaying) {
+      marqueeText.style.animationPlayState = 'paused';
+      clearInterval(animation);
+    } else {
+      marqueeText.style.animationPlayState = 'running';
+      startMarqueeAnimation();
+    }
+    isPlaying = !isPlaying;
+  }
+
+  function next() {
+    currentIndex = (currentIndex + 1) % items.length;
+    updateText();
+  }
+
+  function updateText() {
+    marqueeText.textContent = items[currentIndex];
+  }
+
+  function startMarqueeAnimation() {
+    animation = setInterval(() => {
+      currentIndex = (currentIndex + 1) % items.length;
+      updateText();
+    }, animationSpeed);
+  }
+
+  function fastBackward() {
+    clearInterval(animation);
+    animationSpeed = 500;
+    startMarqueeAnimation();
+  }
+
+  function fastForward() {
+    clearInterval(animation);
+    animationSpeed = 50;
+    startMarqueeAnimation();
+  }
+
+  // Start the marquee animation initially
+  startMarqueeAnimation();
+</script>
+
+</body>
+</html>
